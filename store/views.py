@@ -8,7 +8,7 @@ from django_filters import AllValuesFilter, NumberFilter, FilterSet
 class kategorialista(generics.ListAPIView):
     queryset = Kategoria.objects.all()
     serializer_class = Kategoriaserializers
-    name = 'lista_kategorii'
+    name = 'kategorialista'
     filterset_fields = ['name']
     search_fields = ['name']
     ordering_fields = ['name']
@@ -17,13 +17,13 @@ class kategorialista(generics.ListAPIView):
 class Kategoriadetale(generics.RetrieveUpdateDestroyAPIView):
     queryset = Kategoria.objects.all()
     serializer_class = Kategoriaserializers
-    name = 'kategoria_detal'
+    name = 'Kategoriadetale'
 
 
 class Ogloszenielista(generics.ListCreateAPIView):
     queryset = Ogloszenie.objects.all()
     serializer_class = OgloszenieSerializer
-    name = 'ogloszenie_lista'
+    name = 'Ogloszenielista'
     filter_fields = ['marka', 'kategoria', 'data_dodania', 'miejscowosc', 'cena', 'model']
     search_fields = ['marka', 'model']
     ordering_fields = ['marka', 'kategoria', 'model']
@@ -36,7 +36,7 @@ class Ogloszenielista(generics.ListCreateAPIView):
 class Ogloszeniedetal(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ogloszenie.objects.all()
     serializer_class = OgloszenieSerializer
-    name = 'ogloszenie_detal'
+    name = 'Ogloszeniedetal'
 
 
 class Ogloszenie_Filter(FilterSet):

@@ -1,13 +1,16 @@
 # Django
-from django.db import models
 
+from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Kategoria(models.Model):
-    name = models.CharField(max_length=255, null=False, unique=True)
+
+    kategorie=((1,'Ciągniki Rolnicze'), (2,'Przyczepy rolnicze'))
+    name = models.CharField(max_length=255, null=False, unique=False, choices=kategorie)
 
     class Meta:
-        ordering = ('')
+        ordering = ['name']
 
         def __str__(self):
             return self.name
@@ -15,7 +18,7 @@ class Kategoria(models.Model):
 
 class Ogloszenie(models.Model):
     opis = models.CharField(max_length=255, null=True, unique=False)
-    kategoria = models.ForeignKey(Kategoria, on_delete=models.CASCADE)
+    kategoria = models.ForeignKey(Kategoria,choices=Kategoria.kategorie, on_delete=models.CASCADE)
     wlasciciel = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     data_dodania = models.DateTimeField(auto_now_add=True)
     marka = models.CharField(max_length=50, unique=False, null=False)
