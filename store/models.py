@@ -7,7 +7,7 @@ class Kategoria(models.Model):
     name = models.CharField(max_length=255, null=False, unique=True)
 
     class Meta:
-        ordering = ('name')
+        ordering = ('')
 
         def __str__(self):
             return self.name
