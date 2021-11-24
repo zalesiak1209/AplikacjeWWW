@@ -1,13 +1,13 @@
-# 3rd-party
+
 from rest_framework import serializers
 
-# Local
 from .models import Kategoria
 from .models import Ogloszenie
 from .models import Uzytkownik
 
 
-class Kategoriaerializers(serializers.Serializer):
+
+class Kategoriaserializers(serializers.HyperlinkedModelSerializer):
     name = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='Kategorie')
 
     class Meta:
@@ -17,22 +17,27 @@ class Kategoriaerializers(serializers.Serializer):
 
 class OgloszenieSerializer(serializers.HyperlinkedModelSerializer):
     kategoria = serializers.SlugRelatedField(queryset=Kategoria.objects.all(), slug_field='opis')
-    opis = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='opis')
-    wlasciciel = serializers.ReadOnlyField(source='wlasciciel.username')
-
-    class Meta:
-        model = Uzytkownik
-        fields = ['url', 'pk', 'first_name', 'last_name', 'login', 'numer_telefonu', 'email']
-
-
-class ListaOgloszenSerializer(serializers.Serializer):
-    nazwauzytkownika = serializers.SlugRelatedField(queryset=Uzytkownik.objects.all(), slug_field='login')
+    nazwa_uzytkow = serializers.ReadOnlyField(source='nazwa_uzytkow.username')
 
     class Meta:
         model = Ogloszenie
-        fields = ['pk', 'url', 'opis', 'data_dodania', 'cena', 'model', 'rok']
+        fields = ['url', 'pk', 'opis', 'kategoria', 'wlasciciel', 'data_dodania', 'marka', 'model', 'rok', 'cena', 'numer_telefonu', 'miejscowosc']
+
+
+class ListaOgloszenSerializer(serializers.HyperlinkedModelSerializer):
+    ogloszenie=serializers.SlugRelatedField(queryset=Ogloszenie.objects.all(), slug_field='nazwa_ogloszenia')
+
+    class Meta:
+        model = Ogloszenie
+        fields = ['pk', 'url','nazwa_uzytkow', 'nazwa_ogloszenia', 'numer_telefonu', 'login', 'cena', 'opis']
 
         def sprawdzenie_ceny(self, ceny):
             if ceny < 0:
                 raise serializers.ValidationError("zła cena")
             return ceny
+
+class Uzytkownikserializer(serializers.HyperlinkedModelSerializer):
+    ogloszenia=serializers.HyperlinkedModelSerializer(many= True, read_only= True, view_name='ogloszenie_detail')
+    class Meta:
+        model = Uzytkownik
+        fields=['url', 'pk', 'nazwa_uzytkow', 'numer_telefonu', 'login', 'email']

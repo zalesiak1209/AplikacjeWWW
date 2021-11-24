@@ -15,6 +15,8 @@ class Kategoria(models.Model):
 
 class Ogloszenie(models.Model):
     opis = models.CharField(max_length=255, null=True, unique=False)
+    kategoria = models.ForeignKey(Kategoria, on_delete=models.CASCADE)
+    wlasciciel = models.ForeignKey("auth.User", on_delete=models.CASCADE)
     data_dodania = models.DateTimeField(auto_now_add=True)
     marka = models.CharField(max_length=50, unique=False, null=False)
     model = models.CharField(max_length=50, unique=False, null=False)
@@ -22,8 +24,6 @@ class Ogloszenie(models.Model):
     cena = models.CharField(max_length=255, null=False, unique=False)
     numer_telefonu = models.CharField(max_length=9, null=False, unique=True)
     miejscowosc = models.CharField(max_length=255, null=True, unique=False)
-    kategoria = models.ForeignKey(Kategoria, on_delete=models.CASCADE)
-    wlasciciel = models.ForeignKey("auth.User", on_delete=models.CASCADE)
 
 
 # uzytkownik -> nazwa, numer telefonu, login, hasło, adres, mail
@@ -36,7 +36,20 @@ class Uzytkownik(models.Model):
     haslo = models.CharField(max_length=32, null=False, unique=False)
     email = models.CharField(max_length=32, null=False, unique=True)
 
-    # lista ogloszen -> nazwa uzytkownika, nazwa ogloszenia, reszta z powyzej bez opisu
+    def create_user(self, email, haslo=None):
+        if not email:
+            raise ValueError('Musisz podać adres email.')
+
+        uzytkownik = self.model(
+            email=self.normalize_email(email),
+        )
+
+        uzytkownik.set_password(haslo)
+        uzytkownik.save(using=self._db)
+        return uzytkownik
+
+
+# lista ogloszen -> nazwa uzytkownika, nazwa ogloszenia, reszta z powyzej bez opisu
 
 
 class lista_ogloszen(models.Model):
@@ -44,4 +57,5 @@ class lista_ogloszen(models.Model):
     nazwa_ogloszenia = models.CharField(max_length=255, null=False, unique=False)
     numer_telefonu = models.CharField(max_length=9, null=False, unique=True)
     login = Uzytkownik.login
-    email = Uzytkownik.email
+    cena = Ogloszenie.cena
+    opis = Ogloszenie.opis
