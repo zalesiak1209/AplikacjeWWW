@@ -1,6 +1,7 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 
-from .models import Kategoria, Ogloszenie
+from .custompermission import IsCurrentUserOwnerOrReadOnly
+from .models import Ogloszenie, Kategoria
 from .serializers import Kategoriaserializers, OgloszenieSerializer
 from django_filters import AllValuesFilter, NumberFilter, FilterSet
 
@@ -17,18 +18,18 @@ class kategorialista(generics.ListAPIView):
 class Kategoriadetale(generics.RetrieveUpdateDestroyAPIView):
     queryset = Kategoria.objects.all()
     serializer_class = Kategoriaserializers
-    name = 'Kategoriadetale'
+    name = 'kategoriadetale'
 
 
 class Ogloszenielista(generics.ListCreateAPIView):
     queryset = Ogloszenie.objects.all()
     serializer_class = OgloszenieSerializer
-    name = 'Ogloszenielista'
+    name = 'ogloszenielista'
     filter_fields = ['marka', 'kategoria', 'data_dodania', 'miejscowosc', 'cena', 'model']
     search_fields = ['marka', 'model']
     ordering_fields = ['marka', 'kategoria', 'model']
 
-    # ?????????????????????permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsCurrentUserOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsCurrentUserOwnerOrReadOnly)
     def perform_create(self, serializer):
         serializer.save(owner=self.request.uzytkownik)
 
@@ -36,7 +37,8 @@ class Ogloszenielista(generics.ListCreateAPIView):
 class Ogloszeniedetal(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ogloszenie.objects.all()
     serializer_class = OgloszenieSerializer
-    name = 'Ogloszeniedetal'
+    name = 'ogloszeniedetal'
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsCurrentUserOwnerOrReadOnly,)
 
 
 class Ogloszenie_Filter(FilterSet):

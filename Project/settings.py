@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
+SITE_ID=1
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -69,6 +72,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Project.wsgi.application'
+
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -111,22 +116,20 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-TEMPLATE_PATH = BASE_DIR, "templates"
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR, 'apps_static/'
+STATIC_ROOT = BASE_DIR / 'apps_static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR, 'public/uploads'
-
+MEDIA_ROOT = BASE_DIR / 'public/uploads/'
+#AUTH_USER_MODEL = 'accounts.Uzytkownik'
 try:
     # Project
-    from project.settings_local import *  # noqa: F403, F401
+    from Project.settings_local import *  # noqa: F403, F401
 except ImportError:
     pass
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -18,13 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from store import views
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
     path('', include('store.urls')),
-    path('Kategoria', views.kategorialista.as_view(), name=views.kategorialista.name),
-    path('ogloszenia', views.Ogloszenielista.as_view(), name=views.Ogloszenielista.name),
-    path('kategoria_lista/<int:pk>', views.Kategoriadetale.as_view(), name=views.Kategoriadetale.name),
+    # path('token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+
 ]
