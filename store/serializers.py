@@ -6,22 +6,23 @@ from .models import Uzytkownik
 from .views import *
 
 
-class Kategoriaserializers(serializers.HyperlinkedModelSerializer):
-    name = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='Kategorie')
-
-    class Meta:
-        model = Kategoria
-        fields = ['pk', 'url', 'name']
-
-
 class OgloszenieSerializer(serializers.HyperlinkedModelSerializer):
-    kategoria = serializers.SlugRelatedField(queryset=Kategoria.objects.all(), slug_field='opis')
-    nazwa_uzytkow = serializers.ReadOnlyField(source='nazwa_uzytkow.username')
+    kategoria = serializers.SlugRelatedField(queryset=Kategoria.objects.all(), slug_field='name')
+    wlasciciel = serializers.SlugRelatedField(queryset=Uzytkownik.objects.all(), slug_field='nazwa_uzytkow')
 
     class Meta:
         model = Ogloszenie
-        fields = ['url', 'pk', 'opis', 'kategoria', 'wlasciciel', 'data_dodania', 'marka', 'model', 'rok', 'cena',
+        fields = ['opis', 'kategoria', 'wlasciciel', 'data_dodania', 'marka', 'model', 'rok', 'cena',
                   'numer_telefonu', 'miejscowosc']
+
+
+class Kategoriaserializers(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Kategoria
+        fields = ['name']
+
+    def to_representation(self, instance):
+        return instance.name
 
 
 class ListaOgloszenSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,17 +30,11 @@ class ListaOgloszenSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Ogloszenie
-        fields = ['pk', 'url', 'nazwa_uzytkow', 'nazwa_ogloszenia', 'numer_telefonu', 'login', 'cena', 'opis']
-
-        def sprawdzenie_ceny(self, ceny):
-            if ceny < 0:
-                raise serializers.ValidationError("zła cena")
-            return ceny
+        fields = ['nazwa_uzytkow', 'nazwa_ogloszenia', 'numer_telefonu', 'login', 'cena', 'opis']
 
 
 class Uzytkownikserializer(serializers.HyperlinkedModelSerializer):
-    ogloszenia = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='ogloszenie_detal')
 
     class Meta:
         model = Uzytkownik
-        fields = ['url', 'pk', 'nazwa_uzytkownika', 'numer_telefonu', 'login', 'email']
+        fields = ['url', 'pk', 'nazwa_uzytkow', 'numer_telefonu', 'login', 'email']

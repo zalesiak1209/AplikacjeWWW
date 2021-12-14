@@ -1,13 +1,14 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets, serializers
 
 from .custompermission import IsCurrentUserOwnerOrReadOnly
-from .models import Ogloszenie, Kategoria
-from .serializers import Kategoriaserializers, OgloszenieSerializer
+from .models import Ogloszenie, Kategoria, Uzytkownik
+from .serializers import Kategoriaserializers, OgloszenieSerializer, Uzytkownikserializer
 from django_filters import AllValuesFilter, NumberFilter, FilterSet
 
 
-class kategorialista(generics.ListAPIView):
-    queryset = Kategoria.objects.all()
+class kategorialista(viewsets.ModelViewSet):
+    # queryset = Kategoria.objects.all()
+    queryset = Kategoria.objects.filter()
     serializer_class = Kategoriaserializers
     name = 'kategorialista'
     filterset_fields = ['name']
@@ -15,13 +16,16 @@ class kategorialista(generics.ListAPIView):
     ordering_fields = ['name']
 
 
-class Kategoriadetale(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Kategoria.objects.all()
-    serializer_class = Kategoriaserializers
-    name = 'kategoriadetale'
+class Uzytkowniklista(viewsets.ModelViewSet):
+    queryset = Uzytkownik.objects.all()
+    serializer_class = Uzytkownikserializer
+    name = 'uzytkowniklista'
+    filterset_fields = ['nazwa_uzytkow']
+    search_fields = ['nazwa_uzytkow']
+    ordering_fields = ['nazwa_uzytkow']
 
 
-class Ogloszenielista(generics.ListCreateAPIView):
+class Ogloszenielista(viewsets.ModelViewSet):
     queryset = Ogloszenie.objects.all()
     serializer_class = OgloszenieSerializer
     name = 'ogloszenielista'
@@ -30,15 +34,9 @@ class Ogloszenielista(generics.ListCreateAPIView):
     ordering_fields = ['marka', 'kategoria', 'model']
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsCurrentUserOwnerOrReadOnly)
+
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.uzytkownik)
-
-
-class Ogloszeniedetal(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Ogloszenie.objects.all()
-    serializer_class = OgloszenieSerializer
-    name = 'ogloszeniedetal'
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsCurrentUserOwnerOrReadOnly,)
+        serializer.save(wlasciciel=self.request.uzytkownik)
 
 
 class Ogloszenie_Filter(FilterSet):
