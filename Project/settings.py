@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'store',
     'rest_framework',
-
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +116,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
 STATICFILES_DIRS = [
@@ -125,7 +127,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'apps_static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'public/uploads/'
-#AUTH_USER_MODEL = 'accounts.Uzytkownik'
+AUTH_USER_MODEL = 'store.Uzytkownik'
 try:
     # Project
     from Project.settings_local import *  # noqa: F403, F401
@@ -133,3 +135,13 @@ except ImportError:
     pass
 
 #DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_FILTER_BACKENDS': [
+    'django_filters.rest_framework.DjangoFilterBackend',
+    'rest_framework.filters.SearchFilter',
+    'rest_framework.filters.OrderingFilter',
+    ],
+    'PAGE_SIZE': 5,
+}

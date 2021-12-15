@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 class Kategoria(models.Model):
@@ -15,27 +16,8 @@ class Kategoria(models.Model):
         return self.name
 
 
-class Uzytkownik(models.Model):
-    nazwa_uzytkow = models.CharField(max_length=20, null=False, unique=True)
-    numer_telefonu = models.CharField(max_length=9, null=False, unique=True)
-    login = models.CharField(max_length=9, null=False, unique=True)
-    haslo = models.CharField(max_length=32, null=False)
-    email = models.EmailField(max_length=32, null=False, unique=True)
-
-    def create_user(self, email, haslo=None):
-        if not email:
-            raise ValueError('Musisz podać adres email.')
-
-        uzytkownik = self.model(
-            email=self.normalize_email(email),
-        )
-
-        uzytkownik.set_password(haslo)
-        uzytkownik.save(using=self._db)
-        return uzytkownik
-
-    def __str__(self):
-        return self.nazwa_uzytkow
+class Uzytkownik(AbstractUser):
+    pass
 
 
 class Ogloszenie(models.Model):

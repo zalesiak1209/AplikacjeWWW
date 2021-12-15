@@ -8,7 +8,7 @@ from .views import *
 
 class OgloszenieSerializer(serializers.HyperlinkedModelSerializer):
     kategoria = serializers.SlugRelatedField(queryset=Kategoria.objects.all(), slug_field='name')
-    wlasciciel = serializers.SlugRelatedField(queryset=Uzytkownik.objects.all(), slug_field='nazwa_uzytkow')
+    wlasciciel = serializers.SlugRelatedField(queryset=Uzytkownik.objects.all(), slug_field='username')
 
     class Meta:
         model = Ogloszenie
@@ -21,20 +21,17 @@ class Kategoriaserializers(serializers.HyperlinkedModelSerializer):
         model = Kategoria
         fields = ['name']
 
-    def to_representation(self, instance):
-        return instance.name
-
 
 class ListaOgloszenSerializer(serializers.HyperlinkedModelSerializer):
     ogloszenie = serializers.SlugRelatedField(queryset=Ogloszenie.objects.all(), slug_field='nazwa_ogloszenia')
 
     class Meta:
         model = Ogloszenie
-        fields = ['nazwa_uzytkow', 'nazwa_ogloszenia', 'numer_telefonu', 'login', 'cena', 'opis']
+        fields = ['username', 'nazwa_ogloszenia', 'numer_telefonu', 'login', 'cena', 'opis']
 
 
 class Uzytkownikserializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uzytkownik
-        fields = ['nazwa_uzytkow', 'numer_telefonu', 'login', 'email']
+        fields = ['username']
