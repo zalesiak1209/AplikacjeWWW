@@ -7,13 +7,13 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Kategoria(models.Model):
-    name = models.CharField(max_length=255, null=False, unique=True, verbose_name='Kategoria')
+    nazwa = models.CharField(max_length=255, null=False, unique=True, verbose_name='Kategoria')
 
     class Meta:
-        ordering = ['name']
+        ordering = ['nazwa']
 
     def __str__(self):
-        return self.name
+        return self.nazwa
 
 
 class Uzytkownik(AbstractUser):

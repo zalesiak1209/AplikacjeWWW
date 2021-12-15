@@ -19,9 +19,9 @@ class kategorialista(viewsets.ModelViewSet):
     queryset = Kategoria.objects.filter()
     serializer_class = Kategoriaserializers
     name = 'kategorialista'
-    filterset_fields = ['name']
-    search_fields = ['name', 'queryset']
-    ordering_fields = ['name']
+    filterset_fields = ['nazwa']
+    search_fields = ['nazwa', 'queryset']
+    ordering_fields = ['nazwa']
 
     # def getNumbers(self):
     #     return 'one','two'
