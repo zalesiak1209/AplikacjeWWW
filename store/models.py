@@ -1,4 +1,3 @@
-# Django
 from decimal import Decimal
 
 from django.core.validators import MinValueValidator
@@ -6,15 +5,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# Create your models here.
 class Kategoria(models.Model):
     name = models.CharField(max_length=255, null=False, unique=True, verbose_name='Kategoria')
 
     class Meta:
         ordering = ['name']
 
-        def __str__(self):
-            return self.name
+    def __str__(self):
+        return self.name
 
 
 class Uzytkownik(models.Model):
@@ -36,6 +34,8 @@ class Uzytkownik(models.Model):
         uzytkownik.save(using=self._db)
         return uzytkownik
 
+    def __str__(self):
+        return self.nazwa_uzytkow
 
 
 class Ogloszenie(models.Model):
@@ -50,19 +50,3 @@ class Ogloszenie(models.Model):
                                null=False)
     numer_telefonu = models.DecimalField(decimal_places=0, max_digits=9, null=False, unique=True)
     miejscowosc = models.CharField(max_length=255, null=True)
-
-
-
-# uzytkownik -> nazwa, numer telefonu, login, hasło, adres, mail
-
-
-# lista ogloszen -> nazwa uzytkownika, nazwa ogloszenia, reszta z powyzej bez opisu
-
-
-# class lista_ogloszen(models.Model):
-#     nazwa_uzytkow = models.CharField(max_length=20, null=False, unique=True)
-#     nazwa_ogloszenia = models.CharField(max_length=255, null=False, unique=False)
-#     numer_telefonu = models.CharField(max_length=9, null=False, unique=True)
-#     login = Uzytkownik.login
-#     cena = Ogloszenie.cena
-#     opis = Ogloszenie.opis

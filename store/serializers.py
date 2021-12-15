@@ -37,4 +37,4 @@ class Uzytkownikserializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Uzytkownik
-        fields = ['url', 'pk', 'nazwa_uzytkow', 'numer_telefonu', 'login', 'email']
+        fields = ['nazwa_uzytkow', 'numer_telefonu', 'login', 'email']

@@ -1,3 +1,4 @@
+from django.http import QueryDict
 from rest_framework import generics, permissions, viewsets, serializers
 
 from .custompermission import IsCurrentUserOwnerOrReadOnly
@@ -7,13 +8,19 @@ from django_filters import AllValuesFilter, NumberFilter, FilterSet
 
 
 class kategorialista(viewsets.ModelViewSet):
-    # queryset = Kategoria.objects.all()
     queryset = Kategoria.objects.filter()
     serializer_class = Kategoriaserializers
     name = 'kategorialista'
     filterset_fields = ['name']
-    search_fields = ['name']
+    search_fields = ['name', 'queryset']
     ordering_fields = ['name']
+
+    def getNumbers(self):
+        return 'one','two'
+    one,two=getNumbers()
+
+    # def __getitem__(self, item):
+    #     return self.Kategoria
 
 
 class Uzytkowniklista(viewsets.ModelViewSet):
